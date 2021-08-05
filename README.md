@@ -2,7 +2,7 @@
 ### What it does
 Used in Mindustry Server side.
 
-Mask user said dirty words to star charactor(*).
+Mask user said dirty words to star charactor(`*`).
 
 
 ### Installing
