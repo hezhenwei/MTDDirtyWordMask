@@ -1,0 +1,7 @@
+{
+  "name": "DirtyWordMask",
+  "author": "Myke.H",
+  "main": "MykesTool.WordMaskPlugin",
+  "description": "Mask dirty words.",
+  "version": "0.0.8"
+}
