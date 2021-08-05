@@ -1,4 +1,4 @@
-## For User
+## <font color="#775555">For User</font>
 ### What it does
 Used in Mindustry Server side.
 
