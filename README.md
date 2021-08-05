@@ -1,24 +1,26 @@
-### Setup
+## For User
+### What it does
+Used in Mindustry Server side.
 
-Clone this repository first.
-To edit the plugin display name and other data, take a look at `plugin.json`.
-Edit the name of the project itself by going into `settings.gradle`.
+Mask user said dirty words to star charactor(*).
 
-### Basic Usage
 
-See `src/example/ExamplePlugin.java` for some basic commands and event handlers.  
-Every main plugin class must extend `Plugin`. Make sure that `plugin.json` points to the correct main plugin class.
+### Installing
 
-Please note that the plugin system is in beta, and as such is subject to changes.
+Simply place the .jar file
+in your server's `config/mods` directory.
 
+Then restart the server. Now it works.
+
+To list your currently installed plugin/mods, run `mods` command at server side.
+
+
+#
+#
+## For Developer
 ### Building a Jar
 
 `gradlew jar` / `./gradlew jar`
 
 Output jar should be in `build/libs`.
 
-
-### Installing
-
-Simply place the output jar from the step above in your server's `config/mods` directory and restart the server.
-List your currently installed plugins/mods by running the `mods` command.
