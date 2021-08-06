@@ -9,9 +9,63 @@ import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.net.Administration.*;
 import mindustry.world.blocks.storage.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WordMaskPlugin extends Plugin{
 
+    private String[] arrayDirtyWords = {"heck", "b人", "操", "你妈", "我日"};
+    private List<String> ListDirtyWordsExt = new ArrayList<>();
+
+    private void reloadWords()
+    {
+        ListDirtyWordsExt.clear();
+        String strFileName = "config/DirtyWords.txt";
+        FileReader fr = null;
+        try {
+            fr = new FileReader(strFileName);
+        } catch (FileNotFoundException e) {
+            //e.printStackTrace();
+        }
+        if (fr != null) {
+           //System.out.println("[MTDDirtyWordMask] Reading word mask configs.");
+            Log.info("[MTDDirtyWordMask] Reading word mask configs.");
+            BufferedReader br=new BufferedReader(fr);
+            String line="";
+            int nCount = 0;
+            do{
+                try {
+                    line=br.readLine();
+                } catch (IOException e) {
+                    //e.printStackTrace();
+                }
+                if( line != null) {
+                    nCount++;
+                    ListDirtyWordsExt.add(line);
+                    //System.out.println(line);
+                }
+            } while (line!=null);
+            //System.out.println("[MTDDirtyWordMask] Read " + Integer.toString(nCount) + " words.");
+            Log.info("[MTDDirtyWordMask] Read " + Integer.toString(nCount) + " words.");
+            try {
+                br.close();
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                File f1 = new File(strFileName);
+                f1.createNewFile();
+                //System.out.println("[MTDDirtyWordMask] Create " +strFileName + " to store dirty phrases.");
+                Log.info("[MTDDirtyWordMask] Create " +strFileName + " to store dirty phrases.");
+            } catch (Exception e) {
+                //System.out.println("[MTDDirtyWordMask] Create " +strFileName + " failed" + e.toString());
+                Log.info("[MTDDirtyWordMask] Error! Create " +strFileName + " failed" + e.toString());
+            }
+        }
+    }
     //called when game initializes
     @Override
     public void init(){
@@ -28,15 +82,27 @@ public class WordMaskPlugin extends Plugin{
         });
         */
 
+        this.reloadWords();
         //add a chat filter that changes the contents of all messages
         //in this case, all instances of "heck" are censored
         Vars.netServer.admins.addChatFilter((player, text) -> {
-            text = text.replace("heck", "****");
-            text = text.replace("b人", "****");
-            text = text.replace("操", "**");
-            text = text.replace("你妈", "****");
-            text = text.replace("我日", "****");
-                    ;
+            int size = arrayDirtyWords.length;
+            for (String strToReplace : arrayDirtyWords) {
+                int nPhraseLength = strToReplace.length();
+                StringBuilder sb=new StringBuilder();
+                for(int j=0;j<nPhraseLength;j++) {
+                    sb.append("*");
+                }
+                text = text.replace(strToReplace, sb.toString());
+            }
+                for (String strToReplace : ListDirtyWordsExt) {
+                    int nPhraseLength = strToReplace.length();
+                    StringBuffer sb=new StringBuffer();
+                    for(int j=0;j<nPhraseLength;j++) {
+                        sb.append("*");
+                    }
+                    text = text.replace(strToReplace, sb.toString());
+                }
             //player.sendMessage("try to do something for v008");
             return text;
         });
@@ -56,11 +122,11 @@ public class WordMaskPlugin extends Plugin{
          */
     }
 
-    /*
     //register commands that run on the server
+    /* // sample
     @Override
     public void registerServerCommands(CommandHandler handler){
-        handler.register("reactors", "List all thorium reactors in the map.", args -> {
+        handler.register("reloadwordmask", "Reload word mask in config/DirtyWords.txt.", args -> {
             for(int x = 0; x < Vars.world.width(); x++){
                 for(int y = 0; y < Vars.world.height(); y++){
                     //loop through and log all found reactors
@@ -73,6 +139,13 @@ public class WordMaskPlugin extends Plugin{
         });
     }
     */
+
+    @Override
+    public void registerServerCommands(CommandHandler handler){
+        handler.register("reloadwordmask", "Reload word mask in config/DirtyWords.txt.", args -> {
+            this.reloadWords();
+        });
+    }
 
     /*
     //register commands that player can invoke in-game

@@ -3,5 +3,5 @@
   "author": "Myke.H",
   "main": "MykesTool.WordMaskPlugin",
   "description": "Mask dirty words.",
-  "version": "0.0.8"
+  "version": "0.1.0"
 }
